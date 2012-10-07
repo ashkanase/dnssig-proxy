@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/jedisct1/dnssig-proxy">View on GitHub</a>
 
           <h1 id="project_title">DNSSIG-proxy</h1>
-          <h2 id="project_tagline">A proxy for the DNSSIG protocol, the successor to DNSCrypt</h2>
+          <h2 id="project_tagline">A proxy for DNSSIG</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/jedisct1/dnssig-proxy/zipball/master">Download this project as a .zip file</a>
@@ -31,9 +31,50 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>dnssig-proxy</h1>
+<h1>DNSSIG-proxy</h1>
 
-<p>A proxy for the DNSSIG protocol, the successor to DNSCrypt.</p>
+<p>DNSSIG is a simple and efficient way for authenticating responses sent
+by an upstream DNS resolver to a client.</p>
+
+<p>It has notable advantages over DNSCrypt and DNS-over-TLS:</p>
+
+<ul>
+<li><p>interoperability: it has been designed from the group up to cope
+with broken routers, firewalls and resolvers. DNSSIG-enhanced packets
+look like regular DNS queries.</p></li>
+<li><p>cacheability: DNSSIG-enhanced packets can be cached by local and
+intermediate resolvers.</p></li>
+<li><p>simplicity: it is simple to implement, even just by using the API
+provided by some resolvers.</p></li>
+<li><p>fast: DNSSIG uses the Ed25519 public-key signature system.</p></li>
+<li><p>small: the overhead over unsigned queries is minimal.</p></li>
+</ul>
+
+<p>Q: Cut the crap, how does it work?</p>
+
+<p>DNSSIG is based on SIG(0). Responses are augmented with two records,
+that will eventually be merged into one.
+The first one is to provide optional support for sessions and to
+address replay attacks in a different way than SIG(0). The second one
+is a SIG record.</p>
+
+<p>Q: How does a client get the resolver public key?</p>
+
+<p>The client retrieves binary certificates through a TXT query. The
+zone has to be DNSSEC signed or a trust anchor can be manually
+specified. The DNSSEC validation will be done by the client (thanks to
+ldns).</p>
+
+<p>Q: So, it only checks that what the resolver sent hasn't been tampered
+with, not that the resolver didn't sent wrong records, right?</p>
+
+<p>Correct. This is not a replacement for DNSSEC. The purpose is to sign the
+"last mile". For unsigned zones, this is better than nothing.</p>
+
+<p>Q: So, no encryption?</p>
+
+<p>No. This is not a VPN.</p>
+
       </section>
     </div>
 
