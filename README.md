@@ -42,7 +42,3 @@ with, not that the resolver didn't send wrong records, right?
 
 Correct. This is not a replacement for DNSSEC. The purpose is to sign the
 "last mile". For unsigned zones, this is better than nothing.
-
-Q: So, no encryption?
-
-No. This is not a VPN.
